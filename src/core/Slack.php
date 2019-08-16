@@ -144,7 +144,7 @@
             }
 
             $curlData = $curl->response->channels;
-            $channels = [];
+            $channels = new ChannelArray();
 
             // remove blacklisted channels
             foreach ($curlData as $k => $v) {
@@ -155,7 +155,7 @@
 
             $channels = [];
             foreach ($curlData as $channel) {
-                $channels[] = new Channel($channel->id, new Name($channel->name), $channel->purpose->value);
+                $channels->add(new Channel($channel->id, new Name($channel->name), $channel->purpose->value));
             }
 
             return $channels;
@@ -183,8 +183,6 @@
             $curl->setHeader("Authorization", "Bearer $this->token");
             $curl->setHeader("Content-Type", "application/json; charset=utf-8");
             $curl->post("https://slack.com/api/chat.postMessage", $message->createMessage($channel));
-
-            var_dump($curl->response);
 
             if (isset($curl->response->ok)) {
                 return $curl->response->ok;
