@@ -8,14 +8,14 @@
 
     namespace Ataccama\Output\Slack;
 
-    use Ataccama\Environment\Entities\Base\IEntry;
-    use Ataccama\Environment\Entities\Base\Person;
-    use Ataccama\Environment\Entities\Slack\Channel;
-    use Ataccama\Environment\Entities\Slack\ChannelArray;
-    use Ataccama\Environment\Entities\Slack\SlackMessage;
+    use Ataccama\Common\Env\Email;
+    use Ataccama\Common\Env\IEntry;
+    use Ataccama\Common\Env\Name;
+    use Ataccama\Common\Env\Person;
+    use Ataccama\Slack\Env\Channel;
+    use Ataccama\Slack\Env\ChannelArray;
+    use Ataccama\Slack\Env\SlackMessage;
     use Ataccama\Output\Slack\Exception\SlackException;
-    use Ataccama\Utils\Email;
-    use Ataccama\Utils\Name;
     use Curl\Curl;
     use ErrorException;
     use Exception;
@@ -153,9 +153,8 @@
                 }
             }
 
-            $channels = [];
             foreach ($curlData as $channel) {
-                $channels->add(new Channel($channel->id, new Name($channel->name), $channel->purpose->value));
+                $channels->add(new Channel($channel->id, $channel->name, $channel->purpose->value));
             }
 
             return $channels;
@@ -188,6 +187,7 @@
                 return $curl->response->ok;
             }
 
-            throw new SlackException("Unknown response: " . $curl->errorMessage);
+            throw new SlackException("Unknown response ($curl->errorCode): " . $curl->errorMessage . " | JSON data: " .
+                json_decode($curl->response));
         }
     }

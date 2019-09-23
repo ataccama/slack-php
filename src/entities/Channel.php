@@ -1,13 +1,13 @@
 <?php
 
-    namespace Ataccama\Environment\Entities\Slack;
+    namespace Ataccama\Slack\Env;
 
-    use Ataccama\Environment\Entities\Base\Entry;
+    use Ataccama\Common\Env\Entry;
 
 
     /**
      * Class Channel
-     * @package Ataccama\Environment\Entities\Slack
+     * @package Ataccama\Slack\Env
      * @property-read string $purpose
      * @property-read string $name
      */

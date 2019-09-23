@@ -1,12 +1,14 @@
 <?php
 
+    namespace Ataccama\Slack\Env;
 
-    namespace Ataccama\Environment\Entities\Slack;
-
-
+    /**
+     * Class SlackMessageBlock
+     * @package Ataccama\Slack\Env
+     */
     class SlackMessageBlock
     {
-        /** @var string  */
+        /** @var string */
         const TYPE_SECTION = "section";
 
         ///** @var string  */

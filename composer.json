@@ -2,13 +2,13 @@
   "name": "ataccama/slack-php",
   "license": "MIT",
   "description": "Easy-to-use PHP classes for Slack integration",
-  "version": "1.2",
+  "version": "2.0.0",
   "type": "library",
   "require": {
     "php": ">= 7.2.0",
     "nette/utils": ">= 2.4",
     "php-curl-class/php-curl-class": "^8.6",
-    "ataccama/utils-php": "^1.0",
+    "ataccama/utils-php": "^2.0",
     "tracy/tracy": "^2.6"
   },
   "require-dev": {

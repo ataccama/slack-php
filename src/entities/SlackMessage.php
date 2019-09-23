@@ -1,15 +1,13 @@
 <?php
 
+    namespace Ataccama\Slack\Env;
 
-    namespace Ataccama\Environment\Entities\Slack;
-
-
-    use Ataccama\Environment\Entities\Base\Message;
+    use Ataccama\Common\Env\Message;
 
 
     /**
      * Class SlackMessage
-     * @package Ataccama\Environment\Entities\Slack
+     * @package Ataccama\Slack\Env
      */
     final class SlackMessage extends Message
     {

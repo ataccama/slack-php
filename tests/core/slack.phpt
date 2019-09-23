@@ -5,23 +5,28 @@
     use Tester\Assert;
 
 
+    // set up before tests
+    const TEST_TOKEN = "xoxb-xxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const TEST_GROUP = "GXXXXXXXX";
+    const TEST_USER = "UXXXXXXXX";
+
+
     $slack = new \Ataccama\Output\Slack\Slack([
-        "token"  => "xoxb-xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxx",
+        "token"  => TEST_TOKEN,
         "enable" => true
     ]);
 
-    $message = new \Ataccama\Environment\Entities\Slack\SlackMessage("Test message for channel.");
-    $message->addBlock(new \Ataccama\Environment\Entities\Slack\SlackMessageBlock("Some section"));
-    $message->addBlock(new \Ataccama\Environment\Entities\Slack\SlackMessageBlock("Some section 2"));
-    $message->addBlock(new \Ataccama\Environment\Entities\Slack\SlackMessageBlock("Some section 3"));
+    $message = new \Ataccama\Slack\Env\SlackMessage("Test message for channel.");
+    $message->addBlock(new \Ataccama\Slack\Env\SlackMessageBlock("Some section"));
+    $message->addBlock(new \Ataccama\Slack\Env\SlackMessageBlock("Some section 2"));
+    $message->addBlock(new \Ataccama\Slack\Env\SlackMessageBlock("Some section 3"));
 
-    $response = $slack->sendMessage($message, new \Ataccama\Environment\Entities\Slack\Channel("CXXXXXXXX", "Sandbox"));
+    $response = $slack->sendMessage($message, new \Ataccama\Slack\Env\Channel(TEST_GROUP, "Sandbox"));
 
     Assert::same(true, $response);
 
-    $message = new \Ataccama\Environment\Entities\Slack\SlackMessage("Test message for user.");
+    $message = new \Ataccama\Slack\Env\SlackMessage("Test message for user.");
 
-    $response = $slack->sendMessage($message,
-        new \Ataccama\Environment\Entities\Slack\Channel("UXXXXXXXXXX", "Will Smith"));
+    $response = $slack->sendMessage($message, new \Ataccama\Slack\Env\Channel(TEST_USER, "Will Smith"));
 
     Assert::same(true, $response);
