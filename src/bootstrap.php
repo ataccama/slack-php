@@ -13,5 +13,6 @@
     require __DIR__ . "/entities/SlackMessageBlock.php";
     require __DIR__ . "/entities/SlackMessage.php";
     require __DIR__ . "/entities/Channel.php";
+    require __DIR__ . "/entities/ChannelArray.php";
 
     require __DIR__ . "/core/Slack.php";

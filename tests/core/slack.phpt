@@ -6,9 +6,9 @@
 
 
     // set up before tests
-    const TEST_TOKEN = "xoxb-xxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const TEST_TOKEN = "xoxb-xxxxxxxxxx-xxxxxxxxxxx-xxxxxxxxxxxxxxxxxxx";
     const TEST_GROUP = "GXXXXXXXX";
-    const TEST_USER = "UXXXXXXXX";
+    const TEST_USER  = "UXXXXXXXX";
 
 
     $slack = new \Ataccama\Output\Slack\Slack([
