@@ -16,7 +16,7 @@
          */
         public function add($channel)
         {
-            parent::add($channel);
+            $this->items[$channel->id] = $channel;
         }
 
         /**
@@ -26,5 +26,4 @@
         {
             return parent::current();
         }
-
     }
