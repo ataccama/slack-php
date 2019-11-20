@@ -3,6 +3,7 @@
     namespace Ataccama\Slack\Env;
 
     use Ataccama\Common\Env\BaseArray;
+    use Nette\Utils\Strings;
 
 
     /**
@@ -25,5 +26,20 @@
         public function current(): Channel
         {
             return parent::current();
+        }
+
+        /**
+         * @param string $name
+         * @return Channel|null
+         */
+        public function find(string $name): ?Channel
+        {
+            foreach ($this as $channel) {
+                if (Strings::contains($channel->name, $name)) {
+                    return $channel;
+                }
+            }
+
+            return null;
         }
     }
