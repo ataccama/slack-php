@@ -30,11 +30,16 @@ $message->addBlock( new Image("Image 1", "https://example.xy/image.jpg", "Image 
 
 $channel = new Channel("CXXXXXXXX", "Sandbox")
 
-$response = $slack->sendMessage($message, $channel);
+try {
+    $response = $slack->sendMessage($message, $channel);
+} catch (SlackException $e {
+    // fatal error
+}
 
 if($response) {
     // success
 } else {
     // failed
+    $error = $slack->lastError;    
 }
 ```
