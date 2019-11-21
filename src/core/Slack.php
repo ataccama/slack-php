@@ -12,10 +12,10 @@
     use Ataccama\Common\Env\IEntry;
     use Ataccama\Common\Env\Name;
     use Ataccama\Common\Env\Person;
+    use Ataccama\Output\Slack\Exception\SlackException;
     use Ataccama\Slack\Env\Channel;
     use Ataccama\Slack\Env\ChannelArray;
     use Ataccama\Slack\Env\SlackMessage;
-    use Ataccama\Output\Slack\Exception\SlackException;
     use Curl\Curl;
     use ErrorException;
     use Exception;
@@ -41,6 +41,9 @@
 
         /** @var string|null */
         public $lastError;
+
+        /** @var SlackMessage */
+        public $lastMessage;
 
         /**
          * Slack constructor.
@@ -187,9 +190,10 @@
             $curl->post("https://slack.com/api/chat.postMessage", $message->createMessage($channel));
 
             if (isset($curl->response->ok)) {
-                if(isset($curl->response->error)) {
+                if (isset($curl->response->error)) {
                     $this->lastError = $curl->response->error;
                 }
+
                 return $curl->response->ok;
             }
 

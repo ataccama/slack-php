@@ -38,7 +38,6 @@
                 "text" => [
                     "type"  => $this->type,
                     "text"  => $this->text,
-                    "emoji" => true
                 ]
             ];
         }
