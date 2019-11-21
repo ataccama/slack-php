@@ -39,6 +39,9 @@
          */
         private $blacklist = [];
 
+        /** @var string|null */
+        public $lastError;
+
         /**
          * Slack constructor.
          * @param array $parameters
@@ -184,6 +187,9 @@
             $curl->post("https://slack.com/api/chat.postMessage", $message->createMessage($channel));
 
             if (isset($curl->response->ok)) {
+                if(isset($curl->response->error)) {
+                    $this->lastError = $curl->response->error;
+                }
                 return $curl->response->ok;
             }
 

@@ -24,10 +24,16 @@
 
     $response = $slack->sendMessage($message, new \Ataccama\Slack\Env\Channel(TEST_GROUP, "Sandbox"));
 
-    Assert::same(true, $response);
+    Assert::same(false, $response);
+
+    // comment when you set valid credentials
+    Assert::same("invalid_auth", $slack->lastError);
 
     $message = new \Ataccama\Slack\Env\SlackMessage("Test message for user.");
 
     $response = $slack->sendMessage($message, new \Ataccama\Slack\Env\Channel(TEST_USER, "Will Smith"));
 
-    Assert::same(true, $response);
+    Assert::same(false, $response);
+
+    // comment when you set valid credentials
+    Assert::same("invalid_auth", $slack->lastError);
