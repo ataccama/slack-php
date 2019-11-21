@@ -32,7 +32,7 @@ $channel = new Channel("CXXXXXXXX", "Sandbox")
 
 try {
     $response = $slack->sendMessage($message, $channel);
-} catch (SlackException $e {
+} catch (SlackException $e) {
     // fatal error
 }
 
