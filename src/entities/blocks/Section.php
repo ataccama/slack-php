@@ -28,7 +28,7 @@
             return [
                 "type" => self::TYPE_SECTION,
                 "text" => [
-                    "type"  => "plain_text",
+                    "type"  => "mrkdwn",
                     "text"  => $this->text,
                     "emoji" => true
                 ]
