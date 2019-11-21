@@ -2,7 +2,7 @@
   "name": "ataccama/slack-php",
   "license": "MIT",
   "description": "Easy-to-use PHP classes for Slack integration",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "type": "library",
   "require": {
     "php": ">= 7.2.0",

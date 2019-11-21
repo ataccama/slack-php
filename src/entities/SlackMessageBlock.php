@@ -2,43 +2,24 @@
 
     namespace Ataccama\Slack\Env;
 
+    use Ataccama\Common\Env\IArray;
+
+
     /**
      * Class SlackMessageBlock
      * @package Ataccama\Slack\Env
      */
-    class SlackMessageBlock
+    abstract class SlackMessageBlock implements IArray
     {
         /** @var string */
         const TYPE_SECTION = "section";
 
-        ///** @var string  */
-        //const TYPE_CONTEXT = "context";
+        /** @var string */
+        const TYPE_CONTEXT = "context";
 
         /** @var string */
-        protected $type, $text;
+        const TYPE_DIVIDER = "divider";
 
-        /**
-         * SlackMessageBlock constructor.
-         * @param string $text
-         * @param string $type
-         */
-        public function __construct(string $text, string $type = self::TYPE_SECTION)
-        {
-            $this->type = $type;
-            $this->text = $text;
-        }
-
-        /**
-         * @return array
-         */
-        public function toArray(): array
-        {
-            return [
-                "type" => $this->type,
-                "text" => [
-                    "type" => "mrkdwn",
-                    "text" => $this->text
-                ]
-            ];
-        }
+        /** @var string */
+        const TYPE_IMAGE = "image";
     }

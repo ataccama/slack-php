@@ -24,7 +24,7 @@
          * SlackMessage constructor.
          * @param string $text
          */
-        public function __construct(string $text)
+        public function __construct(string $text = "")
         {
             parent::__construct($text);
         }

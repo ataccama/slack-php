@@ -19,10 +19,14 @@ $slack = new Slack([
             "enable" => true
         ]);
         
+// simple message
 $message = new SlackMessage("Test *message* for channel.");
 
-// optional
-$message->addBlock(new SlackMessageBlock("Some *test* section."));
+// or using blocks
+$message = new SlackMessage();
+$message->addBlock( new Section("Some *test* section.") );
+$message->addBlock( new Divider() );
+$message->addBlock( new Image("Image 1", "https://example.xy/image.jpg", "Image 1 alternative text") );
 
 $channel = new Channel("CXXXXXXXX", "Sandbox")
 
