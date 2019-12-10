@@ -137,7 +137,7 @@
             $curl = new Curl();
             $curl->setHeader("Authorization", "Bearer $this->token");
             $curl->setHeader("Content-Type", "application/json; charset=utf-8");
-            $curl->get("https://slack.com/api/conversations.list", ['exclude_archived' => true, "limit" => 10000]);
+            $curl->get("https://slack.com/api/conversations.list", ['exclude_archived' => true, "limit" => 1000]);
 
             if ($curl->error) {
                 Debugger::log('Slack channels.list error: ' . $curl->errorCode . ': ' . $curl->errorMessage . '');
