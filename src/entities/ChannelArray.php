@@ -29,6 +29,8 @@
         }
 
         /**
+         * Returns first occur.
+         *
          * @param string $name
          * @return Channel|null
          */
@@ -41,5 +43,17 @@
             }
 
             return null;
+        }
+
+        /**
+         * @param $channelId
+         * @return Channel
+         */
+        public function get($channelId): Channel
+        {
+            if (isset($this->items[$channelId])) {
+                return parent::get($channelId);
+            }
+            throw new \OutOfBoundsException("Channel with ID $channelId is not in the array.");
         }
     }

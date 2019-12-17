@@ -137,31 +137,47 @@
             $curl = new Curl();
             $curl->setHeader("Authorization", "Bearer $this->token");
             $curl->setHeader("Content-Type", "application/json; charset=utf-8");
-            $curl->get("https://slack.com/api/conversations.list", ['exclude_archived' => true, "limit" => 1000]);
 
-            if ($curl->error) {
-                Debugger::log('Slack channels.list error: ' . $curl->errorCode . ': ' . $curl->errorMessage . '');
-                throw new SlackException('Slack channels.list error: ' . $curl->errorCode . ': ' . $curl->errorMessage .
-                    '');
-            }
-
-            if (!$curl->response->ok) {
-                throw new SlackException("Slack channels.list error code: [" . $curl->response->error . "]");
-            }
-
-            $curlData = $curl->response->channels;
             $channels = new ChannelArray();
-
-            // remove blacklisted channels
-            foreach ($curlData as $k => $v) {
-                if (in_array($v->name, $this->blacklist)) {
-                    unset($curlData[$k]);
+            $cursor = null;
+            do {
+                $args = [
+                    'exclude_archived' => true,
+                    "limit"            => 1000
+                ];
+                if (!empty($cursor)) {
+                    $args["cursor"] = $cursor;
                 }
-            }
+                $curl->get("https://slack.com/api/conversations.list", $args);
 
-            foreach ($curlData as $channel) {
-                $channels->add(new Channel($channel->id, $channel->name, $channel->purpose->value));
-            }
+                if ($curl->error) {
+                    Debugger::log('Slack channels.list error: ' . $curl->errorCode . ': ' . $curl->errorMessage . '');
+                    throw new SlackException('Slack channels.list error: ' . $curl->errorCode . ': ' .
+                        $curl->errorMessage . '');
+                }
+
+                if (!$curl->response->ok) {
+                    throw new SlackException("Slack conversations.list endpoint error code: [" .
+                        $curl->response->error . "]");
+                }
+
+                $curlData = $curl->response->channels;
+
+                if (isset($curl->response->response_metadata->next_cursor)) {
+                    $cursor = $curl->response->response_metadata->next_cursor;
+                }
+
+                // remove blacklisted channels
+                foreach ($curlData as $k => $v) {
+                    if (in_array($v->name, $this->blacklist)) {
+                        unset($curlData[$k]);
+                    }
+                }
+
+                foreach ($curlData as $channel) {
+                    $channels->add(new Channel($channel->id, $channel->name, $channel->purpose->value));
+                }
+            } while (!empty($cursor));
 
             return $channels;
         }

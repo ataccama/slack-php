@@ -8,6 +8,9 @@
     /**
      * Class Section
      * @package Ataccama\Slack\Blocks
+     *
+     * This class represents default text.
+     * You can choose if it has to be mark-downed or plain-text like.
      */
     class Section extends SlackMessageBlock
     {
@@ -36,8 +39,8 @@
             return [
                 "type" => self::TYPE_SECTION,
                 "text" => [
-                    "type"  => $this->type,
-                    "text"  => $this->text,
+                    "type" => $this->type,
+                    "text" => $this->text,
                 ]
             ];
         }

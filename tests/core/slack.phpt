@@ -25,7 +25,9 @@
 
     $response = $slack->sendMessage($message, new \Ataccama\Slack\Env\Channel(TEST_CHANNEL, "Sandbox"));
 
-    Assert::same(false, $response);
-
     // comment when you set valid credentials
+    Assert::same(false, $response);
     Assert::same("invalid_auth", $slack->lastError);
+
+    // uncomment when you set valid credentials
+//    Assert::same(true, $response);
