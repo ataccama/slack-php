@@ -12,9 +12,13 @@
     use Ataccama\Common\Env\IEntry;
     use Ataccama\Common\Env\Name;
     use Ataccama\Common\Env\Person;
+    use Ataccama\Common\Utils\Cache\DataStorage;
+    use Ataccama\Common\Utils\Cache\Key;
     use Ataccama\Output\Slack\Exception\SlackException;
     use Ataccama\Slack\Env\Channel;
     use Ataccama\Slack\Env\ChannelArray;
+    use Ataccama\Slack\Env\Member;
+    use Ataccama\Slack\Env\MemberList;
     use Ataccama\Slack\Env\SlackMessage;
     use Curl\Curl;
     use ErrorException;
@@ -45,6 +49,9 @@
         /** @var SlackMessage */
         public $lastMessage;
 
+        /** @var DataStorage */
+        private static $cache;
+
         /**
          * Slack constructor.
          * @param array $parameters
@@ -64,6 +71,14 @@
             if (isset($parameters["blacklist"])) {
                 $this->blacklist = $parameters["blacklist"];
             }
+        }
+
+        /**
+         * @param DataStorage $dataStorage
+         */
+        public static function setCache(DataStorage $dataStorage)
+        {
+            self::$cache = $dataStorage;
         }
 
         /**
@@ -134,6 +149,19 @@
          */
         public function getChannels(): ChannelArray
         {
+            $cacheKey = new Key(sha1($this->token) . "_channels");
+
+            if (isset(self::$cache)) {
+                try {
+                    $channels = self::$cache->get($cacheKey);
+                    if (!is_null($channels)) {
+                        return $channels;
+                    }
+                } catch (\Throwable $t) {
+                    // do nothing
+                }
+            }
+
             $curl = new Curl();
             $curl->setHeader("Authorization", "Bearer $this->token");
             $curl->setHeader("Content-Type", "application/json; charset=utf-8");
@@ -179,6 +207,14 @@
                 }
             } while (!empty($cursor));
 
+            if (isset(self::$cache)) {
+                try {
+                    self::$cache->add($cacheKey, $channels, '24 hours');
+                } catch (\Throwable $t) {
+                    // do nothing
+                }
+            }
+
             return $channels;
         }
 
@@ -215,5 +251,59 @@
 
             throw new SlackException("Unknown response ($curl->errorCode): " . $curl->errorMessage . " | JSON data: " .
                 json_decode($curl->response));
+        }
+
+        /**
+         * @return MemberList
+         * @throws ErrorException
+         * @throws SlackException
+         */
+        public function listMembers(): MemberList
+        {
+            $cacheKey = new Key(sha1($this->token) . "_members");
+
+            if (isset(self::$cache)) {
+                try {
+                    $members = self::$cache->get($cacheKey);
+                    if (!is_null($members)) {
+                        return $members;
+                    }
+                } catch (\Throwable $t) {
+                    // do nothing
+                }
+            }
+
+            $curl = new Curl();
+            $curl->setHeader("Authorization", "Bearer $this->token");
+            $curl->get("https://slack.com/api/users.list");
+
+            if ($curl->error) {
+                Debugger::log('Slack channels.list error: ' . $curl->errorCode . ': ' . $curl->errorMessage . '');
+                throw new SlackException('Slack users.list error: ' . $curl->errorCode . ': ' . $curl->errorMessage .
+                    '');
+            }
+
+            if (!$curl->response->ok) {
+                throw new SlackException("Slack conversations.list endpoint error code: [" . $curl->response->error .
+                    "]");
+            }
+
+            $members = new MemberList();
+
+            foreach ($curl->response->members as $member) {
+                if (!$member->deleted and !$member->is_bot and !$member->is_app_user) {
+                    $members->add(new Member($member->id, new Name($member->profile->real_name)));
+                }
+            }
+
+            if (isset(self::$cache)) {
+                try {
+                    self::$cache->add($cacheKey, $members, '24 hours');
+                } catch (\Throwable $t) {
+                    // do nothing
+                }
+            }
+
+            return $members;
         }
     }
