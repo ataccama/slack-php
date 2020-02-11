@@ -3,6 +3,8 @@
     namespace Ataccama\Slack\Env;
 
     use Ataccama\Common\Env\BaseArray;
+    use Ataccama\Common\Env\Pair;
+    use Ataccama\Common\Env\PairArray;
 
 
     /**
@@ -37,5 +39,15 @@
         public function get($memberId): Member
         {
             return parent::get($memberId);
+        }
+
+        public function toPairs(): PairArray
+        {
+            $pairs = new PairArray();
+            foreach ($this as $member) {
+                $pairs->add(new Pair($member->id, $member->name->full));
+            }
+
+            return $pairs;
         }
     }
