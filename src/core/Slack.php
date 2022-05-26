@@ -5,11 +5,11 @@
      * Date: 19/02/2019
      * Time: 16:47
      */
+    declare(strict_types=1);
 
     namespace Ataccama\Output\Slack;
 
     use Ataccama\Common\Env\Email;
-    use Ataccama\Common\Env\IEntry;
     use Ataccama\Common\Env\Name;
     use Ataccama\Common\Env\Person;
     use Ataccama\Common\Utils\Cache\DataStorage;
@@ -21,7 +21,6 @@
     use Ataccama\Slack\Env\MemberList;
     use Ataccama\Slack\Env\SlackMessage;
     use Curl\Curl;
-    use ErrorException;
     use Exception;
     use Tracy\Debugger;
 
@@ -33,24 +32,24 @@
     class Slack
     {
         /** @var string */
-        private $token;
+        private string $token;
 
         /** @var bool */
-        private $enable = false;
+        private bool $enable = false;
 
         /**
          * @var string[]
          */
-        private $blacklist = [];
+        private array $blacklist = [];
 
         /** @var string|null */
-        public $lastError;
+        public ?string $lastError;
 
-        /** @var SlackMessage */
-        public $lastMessage;
+        /** @var SlackMessage|null */
+        public ?SlackMessage $lastMessage;
 
-        /** @var DataStorage */
-        private static $cache;
+        /** @var DataStorage|null */
+        private static ?DataStorage $cache;
 
         /**
          * Slack constructor.
@@ -76,7 +75,7 @@
         /**
          * @param DataStorage $dataStorage
          */
-        public static function setCache(DataStorage $dataStorage)
+        public static function setCache(DataStorage $dataStorage): void
         {
             self::$cache = $dataStorage;
         }
@@ -92,7 +91,6 @@
         /**
          * @param Email $email
          * @return Person
-         * @throws ErrorException
          * @throws SlackException
          */
         public function getUserByEmail(Email $email): Person
@@ -116,17 +114,16 @@
         }
 
         /**
-         * @param IEntry $userId
+         * @param string $userId
          * @return Person
-         * @throws ErrorException
          * @throws SlackException
          */
-        public function getUserByUserID(IEntry $userId): Person
+        public function getUserByUserID(string $userId): Person
         {
             $curl = new Curl();
             $curl->setHeader("Authorization", "Bearer $this->token");
             $curl->setHeader("Content-Type", "application/json; charset=utf-8");
-            $curl->get("https://slack.com/api/users.info", ['user' => $userId->id]);
+            $curl->get("https://slack.com/api/users.info", ['user' => $userId]);
 
             if ($curl->error) {
                 Debugger::log('Slack lookup error: ' . $curl->errorCode . ': ' . $curl->errorMessage . '');
@@ -134,7 +131,7 @@
             }
 
             if (!$curl->response->ok) {
-                throw new SlackException("User ($userId->id) not found. Slack error code: [" . $curl->response->error .
+                throw new SlackException("User ($userId) not found. Slack error code: [" . $curl->response->error .
                     "]");
             }
 
@@ -144,7 +141,6 @@
 
         /**
          * @return ChannelArray
-         * @throws ErrorException
          * @throws SlackException
          */
         public function getChannels(): ChannelArray
@@ -222,7 +218,6 @@
          * @param SlackMessage $message
          * @param Channel      $channel
          * @return bool
-         * @throws ErrorException
          * @throws SlackException
          */
         public function sendMessage(SlackMessage $message, Channel $channel): bool
@@ -255,7 +250,6 @@
 
         /**
          * @return MemberList
-         * @throws ErrorException
          * @throws SlackException
          */
         public function listMembers(): MemberList

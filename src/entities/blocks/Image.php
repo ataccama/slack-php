@@ -1,4 +1,5 @@
 <?php
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Blocks;
 
@@ -12,7 +13,11 @@
     class Image extends SlackMessageBlock
     {
         /** @var string */
-        private $title, $imageUrl, $alternativeText;
+        private string $title;
+        /** @var string */
+        private string $imageUrl;
+        /** @var string */
+        private string $alternativeText;
 
         /**
          * Image constructor.

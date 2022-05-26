@@ -1,4 +1,5 @@
 <?php
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Blocks;
 
@@ -18,10 +19,10 @@
         const TYPE_MARK_DOWN = "mrkdwn";
 
         /** @var string */
-        private $text;
+        private string $text;
 
         /** @var string */
-        private $type;
+        private string $type;
 
         /**
          * Section constructor.

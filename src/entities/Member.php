@@ -1,8 +1,9 @@
 <?php
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Env;
 
-    use Ataccama\Common\Env\BaseEntry;
+    use Ataccama\Common\Env\IdentifiedByString;
     use Ataccama\Common\Env\Name;
 
 
@@ -13,10 +14,11 @@
      */
     class Member
     {
-        use BaseEntry;
+        use IdentifiedByString;
+
 
         /** @var Name */
-        protected $name;
+        protected Name $name;
 
         /**
          * Member constructor.
