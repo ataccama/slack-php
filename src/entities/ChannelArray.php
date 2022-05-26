@@ -1,4 +1,5 @@
 <?php
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Env;
 
@@ -14,16 +15,19 @@
     {
         /**
          * @param Channel $channel
+         * @return ChannelArray
          */
-        public function add($channel)
+        public function add($channel): ChannelArray
         {
             $this->items[$channel->id] = $channel;
+
+            return $this;
         }
 
         /**
-         * @return Channel
+         * @return Channel|null
          */
-        public function current(): Channel
+        public function current(): ?Channel
         {
             return parent::current();
         }
@@ -46,7 +50,7 @@
         }
 
         /**
-         * @param $channelId
+         * @param string $channelId
          * @return Channel
          */
         public function get($channelId): Channel

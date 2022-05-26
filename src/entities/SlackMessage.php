@@ -1,4 +1,5 @@
 <?php
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Env;
 
@@ -12,13 +13,13 @@
     final class SlackMessage extends Message
     {
         /** @var bool */
-        protected $as_user = true;
+        protected bool $as_user = true;
 
         /** @var string */
-        protected $icon_emoji = ":robot_face:", $username = "Bot";
+        protected string $icon_emoji = ":robot_face:", $username = "Bot";
 
         /** @var SlackMessageBlock[] */
-        protected $blocks = [];
+        protected array $blocks = [];
 
         /**
          * SlackMessage constructor.

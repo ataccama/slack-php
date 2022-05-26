@@ -1,16 +1,19 @@
 <?php
-
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Blocks;
-
 
     use Ataccama\Slack\Env\SlackMessageBlock;
 
 
+    /**
+     * Class Context
+     * @package Ataccama\Slack\Blocks
+     */
     class Context extends SlackMessageBlock
     {
         /** @var string[] */
-        private $texts = [];
+        private array $texts = [];
 
         /**
          * Context constructor.

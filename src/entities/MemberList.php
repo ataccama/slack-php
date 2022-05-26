@@ -1,4 +1,5 @@
 <?php
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Env;
 
@@ -17,7 +18,7 @@
          * @param Member $member
          * @return MemberList
          */
-        public function add($member)
+        public function add($member): MemberList
         {
             $this->items[$member->id] = $member;
 
@@ -25,9 +26,9 @@
         }
 
         /**
-         * @return Member
+         * @return Member|null
          */
-        public function current(): Member
+        public function current(): ?Member
         {
             return parent::current();
         }

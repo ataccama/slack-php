@@ -1,8 +1,11 @@
 <?php
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Env;
 
-    use Ataccama\Common\Env\Entry;
+
+    use Ataccama\Common\Env\IdentifiedByString;
+    use Ataccama\Common\Interfaces\IdentifiableByString;
 
 
     /**
@@ -11,39 +14,42 @@
      * @property-read string $purpose
      * @property-read string $name
      */
-    class Channel extends Entry
+    class Channel implements IdentifiableByString
     {
-        /** @var string */
-        protected $purpose;
+        use IdentifiedByString;
 
-        /** @var string */
-        protected $name;
+
+        /** @var string|null */
+        protected ?string $purpose;
+
+        /** @var string|null */
+        protected ?string $name;
 
         /**
          * Channel constructor.
          * @param string      $id
-         * @param string      $name
+         * @param string|null $name
          * @param string|null $purpose
          */
-        public function __construct(string $id, string $name, string $purpose = null)
+        public function __construct(string $id, ?string $name = null, ?string $purpose = null)
         {
-            parent::__construct($id);
+            $this->id = $id;
             $this->purpose = $purpose;
             $this->name = $name;
         }
 
         /**
-         * @return string
+         * @return string|null
          */
-        public function getPurpose(): string
+        public function getPurpose(): ?string
         {
             return $this->purpose;
         }
 
         /**
-         * @return string
+         * @return string|null
          */
-        public function getName(): string
+        public function getName(): ?string
         {
             return $this->name;
         }

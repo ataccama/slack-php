@@ -1,4 +1,5 @@
 <?php
+    declare(strict_types=1);
 
     namespace Ataccama\Slack\Blocks;
 
@@ -12,7 +13,7 @@
     class Fields extends SlackMessageBlock
     {
         /** @var string[] */
-        private $texts = [];
+        private array $texts = [];
 
         /**
          * Context constructor.
